@@ -1,0 +1,38 @@
+cmake_minimum_required(VERSION 3.14)
+project(ftd2xx VERSION 2.12.36.4)
+
+set(ZIP_FILE_URL "https://ftdichip.com/wp-content/uploads/2023/09/CDM-v2.12.36.4-WHQL-Certified.zip")
+set(ZIP_FILE "${CMAKE_BINARY_DIR}/ftd2xx.zip")
+set(EXTRACTED_DIR "${CMAKE_BINARY_DIR}/extracted")
+
+file(DOWNLOAD ${ZIP_FILE_URL} ${ZIP_FILE} SHOW_PROGRESS)
+file(ARCHIVE_EXTRACT INPUT ${ZIP_FILE} DESTINATION ${EXTRACTED_DIR})
+
+set(INSTALL_INCLUDE_DIR "include")
+set(INSTALL_LIB_DIR "lib")
+set(INSTALL_LIB_NAME "ftd2xx")
+set(INSTALL_BIN_DIR "bin")
+set(INSTALL_CMAKE_DIR "cmake")
+
+install(FILES "${EXTRACTED_DIR}/ftd2xx.h" DESTINATION ${INSTALL_INCLUDE_DIR})
+install(FILES "${EXTRACTED_DIR}/amd64/ftd2xx.lib" DESTINATION ${INSTALL_LIB_DIR})
+install(PROGRAMS "${EXTRACTED_DIR}/amd64/ftd2xx64.dll" DESTINATION ${INSTALL_BIN_DIR} RENAME "ftd2xx.dll")
+
+include(CMakePackageConfigHelpers)
+configure_package_config_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/ftd2xx-config.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/ftd2xx-config.cmake
+    INSTALL_DESTINATION cmake
+)
+
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/ftd2xx-config.cmake" DESTINATION ${INSTALL_CMAKE_DIR})
+
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt")
+set(CPACK_PACKAGE_VERSION_MAJOR "${ftd2xx_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${ftd2xx_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${ftd2xx_VERSION_PATCH}")
+set(CPACK_PACKAGE_VENDOR "FTDI")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "ftd2xx")
+set(CPACK_GENERATOR "WIX")
+set(CPACK_WIX_UPGRADE_GUID "a95aa108-be02-4200-a2ba-1c40a45cf7fe")
+include(CPack)
