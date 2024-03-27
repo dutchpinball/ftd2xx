@@ -1,0 +1,14 @@
+<CPackWiXPatch>
+	<!-- determined these names by decompiling by dark.exe -->
+	<CPackWiXFragment Id="CM_CP_bin.ftd2xx.dll">
+		<!-- https://stackoverflow.com/a/11433557 -->
+		<Environment 
+			Id="PATH" 
+			Name="PATH" 
+			Value="[CM_DP_bin]" 
+			Permanent="no" 
+			Part="last" 
+			Action="set" 
+			System="yes" />
+	</CPackWiXFragment>
+</CPackWiXPatch>
